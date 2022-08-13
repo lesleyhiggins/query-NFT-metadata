@@ -1,0 +1,70 @@
+%%[
+    
+FOR @i = 0 to 750 do
+
+SET @JSON = HTTPGet(concat("https://app.metaangelsnft.com/metadata/",@i,".json")) 
+
+]%%
+
+<script runat="server">
+   Platform.Load("Core", "1")
+  
+    var background = '';
+    var wings = '';
+    var halo = '';
+    var embellishment = '';
+    var skin = '';
+    var eyes = '';
+    var mouth = '';
+    var attire = '';
+    var hair = '';
+    var archetype = '';
+    var rarity = '';
+
+    var number = Variable.GetValue("@i");
+    var str = Variable.GetValue("@JSON");
+    var obj = Platform.Function.ParseJSON(str);
+    var name = obj.name;
+    var description = obj.description;
+    var image = obj.image;
+    var angel_type = obj.angel_type;
+    var external_url = obj.external_url;
+    var attributes = obj.attributes;
+  
+    if(attributes.length >= 1) {
+      for (i = 0; i < attributes.length; i++) {
+        
+        if (attributes[i].trait_type === "Background") {
+          var background = attributes[i].value;
+        } else if (attributes[i].trait_type === "Wings") {
+          var wings = attributes[i].value;
+        } else if (attributes[i].trait_type === "Halo") {
+          var halo = attributes[i].value;
+        } else if (attributes[i].trait_type === "Halo Embellishment") {
+          var embellishment = attributes[i].value;
+        } else if (attributes[i].trait_type === "Skin") {
+          var skin = attributes[i].value;
+        } else if (attributes[i].trait_type === "Eyes") {
+          var eyes = attributes[i].value;
+        } else if (attributes[i].trait_type === "Mouth") {
+          var mouth = attributes[i].value;
+        } else if (attributes[i].trait_type === "Attire") {
+          var attire = attributes[i].value;
+        } else if (attributes[i].trait_type === "Hair") {
+          var hair = attributes[i].value;
+        } else if (attributes[i].trait_type === "Angel Archetype") {
+          var archetype = attributes[i].value;
+        } else if (attributes[i].trait_type === "Rarity Rank (#1 Rarest)") {
+          var rarity = attributes[i].value;
+        };
+      };
+    };
+        
+ var rows = Platform.Function.UpsertData("Meta Angels",
+                               ["Number"],[number],
+                               ["name","description","image","angel_type","external_url","Background","Wings","Halo","Halo Embellishment",
+                                "Skin","Eyes","Mouth","Attire","Hair","Angel Archetype","Rarity Rank"],
+                               [name,description,image,angel_type,external_url,background,wings,halo,embellishment,skin,eyes,mouth,attire,hair,archetype,rarity]);
+</script>
+
+%%[ next ]%%
